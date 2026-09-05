@@ -1,0 +1,26 @@
+skills
+AGENT.md
+
+# Python ML
+ml-training/venv/
+ml-training/data/
+*.pth
+*.onnx
+!traffic_sign_model.onnx
+!**/model/*.onnx
+__pycache__/
+*.pyc
+
+
+# Java Spring Boot
+target/
+.mvn/
+.classpath
+.project
+.settings/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

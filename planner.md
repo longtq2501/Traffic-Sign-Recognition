@@ -36,18 +36,18 @@
 **Mục tiêu:** Có model CNN đã train, đạt độ chính xác chấp nhận được, export sang ONNX.
 
 **Việc cần làm:**
-- [ ] Tải Kaggle Traffic Sign Dataset (GTSRB hoặc tương đương), giải nén vào `ml-training/data/`
-- [ ] Viết script tiền xử lý: resize ảnh về kích thước cố định (ví dụ 32x32 hoặc 64x64), normalize pixel [0,1], chia train/val/test
-- [ ] Data augmentation: xoay, lật, thay đổi độ sáng (dùng `ImageDataGenerator` hoặc `albumentations`)
-- [ ] Thiết kế kiến trúc CNN (Conv2D → MaxPooling → Dropout → Dense → Softmax)
-- [ ] Train model, theo dõi accuracy/loss qua các epoch, lưu checkpoint tốt nhất
-- [ ] Đánh giá trên tập test, in confusion matrix / classification report
-- [ ] Export model sang ONNX (`tf2onnx.convert` nếu dùng TensorFlow/Keras)
-- [ ] Ghi lại: tên input/output tensor, kích thước input, thứ tự class (mapping index → tên biển báo) vào file `class_mapping.json`
+- [x] Tải Kaggle Traffic Sign Dataset (GTSRB hoặc tương đương), giải nén vào `ml-training/data/`
+- [x] Viết script tiền xử lý: resize ảnh về kích thước cố định (32x32), normalize pixel ImageNet, chia train/val/test
+- [x] Data augmentation: xoay, thay đổi độ sáng, contrast (`transforms.Compose`)
+- [x] Thiết kế kiến trúc CNN (Conv2D → BatchNorm → ReLU → Conv2D → BatchNorm → ReLU → MaxPool → Dropout)
+- [x] Train model, theo dõi accuracy/loss qua các epoch, lưu checkpoint tốt nhất (`best_model.pth`, 98.38% test accuracy)
+- [x] Đánh giá trên tập test, in confusion matrix / classification report (`evaluation_report.json`)
+- [x] Export model sang ONNX (`torch.onnx.export` cho PyTorch, format NCHW `[batch_size, 3, 32, 32]` -> `traffic_sign_model.onnx`)
+- [x] Ghi lại: tên input/output tensor, kích thước input, thứ tự class (mapping index → tên biển báo) vào file `class_mapping.json`
 
-**Deliverable:** File `traffic_sign_model.onnx` + `class_mapping.json`, báo cáo accuracy trên test set (≥ ngưỡng đặt ra, ví dụ 90%).
+**Deliverable:** File `traffic_sign_model.onnx` + `class_mapping.json`, báo cáo accuracy trên test set (đạt 98.38% > 90%).
 
-**Acceptance criteria:** Model load được bằng `onnxruntime` (Python) và cho output hợp lý trên vài ảnh test thủ công.
+**Acceptance criteria:** Đã nghiệm thu thành công qua `verify_onnx.py` load model bằng `onnxruntime` (Python) và nhận diện chính xác các ảnh test GTSRB.
 
 ---
 
@@ -64,7 +64,7 @@
 
 **Deliverable:** Test case chứng minh inference Java cho kết quả khớp (hoặc gần khớp, sai số chấp nhận được) với Python.
 
-**Lưu ý cho agent:** Đây là phase dễ lỗi ngầm nhất — sai thứ tự kênh màu (BGR vs RGB) hoặc sai kích thước input sẽ khiến model chạy nhưng dự đoán sai mà không báo lỗi.
+**Lưu ý cho agent:** Đây là phase dễ lỗi ngầm nhất — sai thứ tự kênh màu (BGR vs RGB) hoặc sai thứ tự tensor input (`NCHW`: `float[1][3][32][32]` của PyTorch thay vì `NHWC`: `float[1][32][32][3]` của Keras) sẽ khiến model chạy mà dự đoán sai hoàn toàn. Java side PHẢI build tensor theo `NCHW` `[1, 3, 32, 32]`.
 
 ---
 

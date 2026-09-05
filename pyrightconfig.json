@@ -1,0 +1,9 @@
+{
+  "venvPath": "ml-training",
+  "venv": "venv",
+  "pythonPath": "ml-training/venv/Scripts/python.exe",
+  "extraPaths": [
+    "ml-training",
+    "ml-training/venv/Lib/site-packages"
+  ]
+}
