@@ -17,6 +17,9 @@
 	<properties>
 		<java.version>17</java.version>
 		<onnxruntime.version>1.18.0</onnxruntime.version>
+		<javacv.version>1.5.11</javacv.version>
+		<ffmpeg.version>7.1-1.5.11</ffmpeg.version>
+		<javacpp.platform>windows-x86_64</javacpp.platform>
 	</properties>
 
 	<dependencies>
@@ -31,6 +34,19 @@
 			<groupId>com.microsoft.onnxruntime</groupId>
 			<artifactId>onnxruntime</artifactId>
 			<version>${onnxruntime.version}</version>
+		</dependency>
+
+		<!-- JavaCV & FFmpeg for Video Frame Processing -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>${javacv.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>${ffmpeg.version}</version>
+			<classifier>${javacpp.platform}</classifier>
 		</dependency>
 
 		<!-- Lombok -->

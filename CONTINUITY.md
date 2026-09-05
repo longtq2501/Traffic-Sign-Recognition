@@ -1,18 +1,17 @@
 # Continuity Ledger
 
-## Current Phase: Hoan thanh Phase 2 - San sang chuyen giao sang Phase 3 (Xu ly anh & video Backend)
+## Current Phase: Hoan thanh Phase 3 - San sang chuyen giao sang Phase 4 (Database & Persistence)
 
-### Completed Work (Phase 2 & Phase 0 Initialization)
-- Spring Boot 3.3.5 project initialized in `backend/` with Java 17 and Maven Wrapper (`mvnw.cmd`).
-- ONNX Runtime Java 1.18.0 configured in `pom.xml`.
-- Embedded `traffic_sign_model.onnx` and `class_mapping.json` in `backend/src/main/resources/model/`.
-- Implemented `ClassMappingService` and `ClassMappingServiceImpl` according to Spring clean code guidelines (Interface + Impl separation, `@RequiredArgsConstructor`, logging).
-- Implemented `ModelInferenceService` and `ModelInferenceServiceImpl` using Microsoft ONNX Runtime Java (`OrtEnvironment`, `OrtSession`, Softmax probabilities, inference timing).
-- Created response DTOs (`SignPredictionResponse`, `SignClassInfo`) and custom domain exception (`ModelInferenceException`).
-- Verified via `ModelInferenceServiceTest`: 4/4 tests passed with 8ms inference time per tensor.
+### Completed Work (Phase 3: Xu ly anh & video Backend)
+- Configured `javacv` 1.5.11 and `ffmpeg` 7.1-1.5.11 with Windows classifier in `pom.xml`.
+- Created DTOs `FrameDetectionResult` and `VideoRecognitionResponse`.
+- Implemented `ImageProcessingService` and `ImageProcessingServiceImpl` converting any `BufferedImage`, byte array, or `InputStream` into normalized NCHW `float[1][3][32][32]` tensor matching PyTorch ImageNet normalization.
+- Implemented `VideoProcessingService` and `VideoProcessingServiceImpl` extracting sampled frames with timestamps using `FFmpegFrameGrabber`.
+- Implemented `RecognitionOrchestratorService` and `RecognitionOrchestratorServiceImpl` coordinating the end-to-end flow: Image/Video -> Preprocessing -> ONNX Inference -> DTO Response.
+- Added comprehensive unit and integration tests (`ImageProcessingServiceTest`, `RecognitionOrchestratorServiceTest`): Total 9/9 tests passed!
 
-### Next Immediate Steps (Phase 3: Xu ly anh & video Backend)
-1. Add image processing dependency (`org.openpnp:opencv` or Java standard `BufferedImage`).
-2. Implement `ImageProcessingService` to convert uploaded MultipartFile to NCHW `float[1][3][32][32]` tensor matching Python ImageNet normalization (`mean = [0.485, 0.456, 0.406]`, `std = [0.229, 0.224, 0.225]`).
-3. Implement `VideoProcessingService` using JavaCV / FFmpegFrameGrabber for frame sampling.
-4. Implement `RecognitionOrchestratorService` orchestrating Image/Video -> Preprocessing -> Inference -> Response.
+### Next Immediate Steps (Phase 4: Database & Persistence)
+1. Add Spring Data JPA and MySQL Connector dependencies to `pom.xml`.
+2. Configure MySQL datasource and JPA properties in `application.yml`.
+3. Design Entities: `User` and `RecognitionLog` (storing input type, detected sign, confidence score, timestamp, file reference).
+4. Implement Repositories and `RecognitionLogService` (Interface + Impl) for history persistence.

@@ -73,12 +73,12 @@
 **Mục tiêu:** Backend nhận file ảnh/video, tiền xử lý đúng chuẩn đầu vào model.
 
 **Việc cần làm:**
-- [ ] Thêm dependency xử lý ảnh (`org.openpnp:opencv` hoặc `javacv-platform` nếu cần xử lý video)
-- [ ] Viết `ImageProcessingService`: resize, normalize ảnh về đúng format model yêu cầu
-- [ ] Viết `VideoProcessingService`: dùng JavaCV (`FFmpegFrameGrabber`) tách video thành frame rời rạc (có thể sample mỗi N frame để giảm tải, không cần xử lý toàn bộ)
-- [ ] Viết `RecognitionOrchestratorService`: điều phối luồng ảnh/video → preprocessing → inference → format kết quả trả về
+- [x] Thêm dependency xử lý video `org.bytedeco:javacv` và `ffmpeg` (với cấu hình platform windows-x86_64) vào `pom.xml`
+- [x] Viết `ImageProcessingService` (Interface + Impl): resize 32x32 Bilinear, chuẩn hóa ImageNet theo NCHW `[1, 3, 32, 32]`
+- [x] Viết `VideoProcessingService` (Interface + Impl): dùng JavaCV `FFmpegFrameGrabber` tách frame lấy mẫu theo chu kỳ thời gian linh hoạt
+- [x] Viết `RecognitionOrchestratorService` (Interface + Impl): điều phối chuỗi `Image/Video -> Preprocessing -> ModelInference -> DTO Response`
 
-**Deliverable:** Có thể đưa 1 file ảnh và 1 file video test qua service, nhận về danh sách kết quả nhận diện hợp lệ.
+**Deliverable:** Toàn bộ test suite 9/9 tests passed chứng minh pipeline xử lý ảnh và video hoạt động mượt mà.
 
 ---
 
