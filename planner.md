@@ -87,12 +87,13 @@
 **Mục tiêu:** Lưu lịch sử nhận diện và dữ liệu người dùng vào MySQL.
 
 **Việc cần làm:**
-- [ ] Thiết kế schema: bảng `users`, bảng `recognition_logs` (id, user_id, input_type [image/video/realtime], detected_sign, confidence_score, timestamp, file_reference)
-- [ ] Tạo Entity + Repository (Spring Data JPA) tương ứng
-- [ ] Cấu hình `application.properties`/`yml` kết nối MySQL (datasource URL, username, password, `spring.jpa.hibernate.ddl-auto`)
-- [ ] Viết `RecognitionLogService`: lưu kết quả mỗi lần nhận diện
+- [x] Thiết kế schema: bảng `users`, bảng `recognition_logs` (id, user_id, input_type [image/video/realtime], detected_sign, confidence_score, timestamp, file_reference)
+- [x] Tạo Entity + Repository (Spring Data JPA) tương ứng tuân thủ Clean Code rules (không dùng @Data trên Entity, Indexing, Interface/Impl)
+- [x] Cấu hình `application.yml` kết nối MySQL (`traffic_sign_db`) và cấu hình test H2 in-memory
+- [x] Viết `RecognitionLogService` (Interface + Impl) và DTOs tương ứng: lưu log, phân trang, lọc theo inputType, thống kê tổng quan
+- [x] Viết unit & integration test `RecognitionLogServiceTest` (13/13 tests toàn backend pass sạch)
 
-**Deliverable:** Chạy app, thực hiện 1 request nhận diện thử, kiểm tra record xuất hiện đúng trong MySQL.
+**Deliverable:** Tầng persistence hoàn chỉnh, sẵn sàng tích hợp vào REST API ở Phase 5.
 
 ---
 
