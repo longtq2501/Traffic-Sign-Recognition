@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: traffic-sign-backend
+
+app:
+  model:
+    onnx-path: classpath:model/traffic_sign_model.onnx
+    mapping-path: classpath:model/class_mapping.json

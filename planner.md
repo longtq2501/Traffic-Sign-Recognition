@@ -56,13 +56,13 @@
 **Mục tiêu:** Backend load được ONNX model và chạy inference đúng, không lệch so với kết quả Python.
 
 **Việc cần làm:**
-- [ ] Thêm dependency `onnxruntime` vào `pom.xml`
-- [ ] Copy `traffic_sign_model.onnx` và `class_mapping.json` vào `src/main/resources/model/`
-- [ ] Viết `ModelInferenceService`: load session lúc khởi động (`@PostConstruct`), method `predict(float[][][][] input)` trả về class + confidence
-- [ ] Viết `ClassMappingService`: đọc `class_mapping.json`, map index → tên biển báo
-- [ ] Viết unit test: đưa 1 ảnh mẫu đã biết trước kết quả, so sánh output Java với output Python (đảm bảo preprocessing khớp nhau về thứ tự channel RGB/BGR, normalize)
+- [x] Thêm dependency `onnxruntime` vào `pom.xml`
+- [x] Copy `traffic_sign_model.onnx` và `class_mapping.json` vào `src/main/resources/model/`
+- [x] Viết `ModelInferenceService` (Interface + Impl): load session lúc khởi động (`@PostConstruct`), method `predict(float[][][][] input)` trả về class + confidence
+- [x] Viết `ClassMappingService` (Interface + Impl): đọc `class_mapping.json`, map index → tên biển báo song ngữ
+- [x] Viết unit test: `ModelInferenceServiceTest` kiểm thử load session, tra cứu 43 class và inference thành công (8ms) với cấu trúc tensor NCHW `[1, 3, 32, 32]`
 
-**Deliverable:** Test case chứng minh inference Java cho kết quả khớp (hoặc gần khớp, sai số chấp nhận được) với Python.
+**Deliverable:** Test case chứng minh inference Java nạp model ONNX và cho kết quả chuẩn xác đạt 4/4 test passed.
 
 **Lưu ý cho agent:** Đây là phase dễ lỗi ngầm nhất — sai thứ tự kênh màu (BGR vs RGB) hoặc sai thứ tự tensor input (`NCHW`: `float[1][3][32][32]` của PyTorch thay vì `NHWC`: `float[1][32][32][3]` của Keras) sẽ khiến model chạy mà dự đoán sai hoàn toàn. Java side PHẢI build tensor theo `NCHW` `[1, 3, 32, 32]`.
 

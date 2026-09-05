@@ -14,7 +14,7 @@ __pycache__/
 
 # Java Spring Boot
 target/
-.mvn/
+**/target/
 .classpath
 .project
 .settings/
