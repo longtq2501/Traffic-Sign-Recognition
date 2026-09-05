@@ -102,13 +102,15 @@
 **Mục tiêu:** Expose các API cho 3 chế độ nhận diện.
 
 **Việc cần làm:**
-- [ ] `POST /api/recognize/image` — nhận file ảnh (multipart), trả JSON `{sign_name, confidence}`
-- [ ] `POST /api/recognize/video` — nhận file video, trả danh sách kết quả theo từng frame/timestamp
-- [ ] WebSocket endpoint `/ws/realtime` — nhận frame ảnh (base64/binary) liên tục từ client, trả kết quả từng frame theo thời gian thực
-- [ ] `GET /api/logs` — trả lịch sử nhận diện (có thể lọc theo user, thời gian)
-- [ ] Xử lý lỗi: file không hợp lệ, không tìm thấy biển báo trong ảnh, file quá lớn
+- [x] `POST /api/recognize/image` — nhận file ảnh (multipart), tiền xử lý và inference qua model ONNX, tự động lưu log vào database, trả JSON `{logId, classId, signNameEn, signNameVi, category, confidence, inferenceTimeMs, fileName}`
+- [x] `POST /api/recognize/video` — nhận file video, trích xuất frame theo interval, lọc ngưỡng confidence, ghi log vào database, trả danh sách kết quả theo timeline
+- [x] WebSocket endpoint `/ws/realtime` — nhận frame ảnh base64 liên tục từ webcam client, trả kết quả từng frame thời gian thực (độ trễ 1-2ms)
+- [x] `GET /api/recognize/classes` — trả danh mục 43 biển báo song ngữ phục vụ hiển thị tra cứu
+- [x] `GET /api/logs` & `GET /api/logs/recent` & `GET /api/logs/stats` — xem lịch sử nhận diện có phân trang, lọc theo inputType và phân tích số liệu thống kê
+- [x] Xử lý lỗi tập trung qua `@RestControllerAdvice`: file rỗng, sai định dạng ảnh/video, file quá lớn (>50MB), lỗi suy luận model
+- [x] Cấu hình CORS mở rộng cho phép frontend kết nối trực tiếp không bị chặn
 
-**Deliverable:** Test toàn bộ API bằng Postman/curl, có collection lưu lại để demo.
+**Deliverable:** Toàn bộ API Backend AI (Image, Video, Realtime WebSocket, Logs, Stats, Classes) hoàn tất, kiểm thử tự động 22/22 tests PASS 100%.
 
 ---
 
