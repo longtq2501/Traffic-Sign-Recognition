@@ -1,4 +1,4 @@
-﻿"""
+"""
 train_vn.py  –  Train TrafficSignCNN from scratch on 15 Vietnamese sign classes.
 Reads images from data/vn_signs/<class_id>/*.png
 """
@@ -122,7 +122,7 @@ def main():
 
     train_ds = SubsetWithTransform(full_ds, train_idx.indices, TRAIN_TRANSFORM)
     val_ds   = SubsetWithTransform(full_ds, val_idx.indices,   VAL_TRANSFORM)
-    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     val_loader   = DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False)
     print(f"Train: {len(train_ds)}, Val: {len(val_ds)}")
 

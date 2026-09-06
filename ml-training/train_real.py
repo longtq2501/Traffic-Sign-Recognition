@@ -210,7 +210,7 @@ def train_and_export():
         print("Error: No training data found!")
         return
 
-    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True)
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
     val_loader   = DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
