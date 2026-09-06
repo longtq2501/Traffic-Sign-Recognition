@@ -1,17 +1,14 @@
 # Continuity Ledger
 
-## Current Phase: Hoan thanh Phase 3 - San sang chuyen giao sang Phase 4 (Database & Persistence)
+## Current Phase: Hoàn thành Huấn luyện 15 Biển báo Việt Nam & Tự động Triển khai Model ONNX
 
-### Completed Work (Phase 3: Xu ly anh & video Backend)
-- Configured `javacv` 1.5.11 and `ffmpeg` 7.1-1.5.11 with Windows classifier in `pom.xml`.
-- Created DTOs `FrameDetectionResult` and `VideoRecognitionResponse`.
-- Implemented `ImageProcessingService` and `ImageProcessingServiceImpl` converting any `BufferedImage`, byte array, or `InputStream` into normalized NCHW `float[1][3][32][32]` tensor matching PyTorch ImageNet normalization.
-- Implemented `VideoProcessingService` and `VideoProcessingServiceImpl` extracting sampled frames with timestamps using `FFmpegFrameGrabber`.
-- Implemented `RecognitionOrchestratorService` and `RecognitionOrchestratorServiceImpl` coordinating the end-to-end flow: Image/Video -> Preprocessing -> ONNX Inference -> DTO Response.
-- Added comprehensive unit and integration tests (`ImageProcessingServiceTest`, `RecognitionOrchestratorServiceTest`): Total 9/9 tests passed!
+### Completed Work
+- Cập nhật bộ 15 biển báo giao thông Việt Nam thực tế trong `ml-training/dataset_real` và `class_mapping_vn.json`.
+- Cập nhật script `train_real.py`: Tự động Augmentation dữ liệu, khắc phục lỗi DataLoader `drop_last=True`, xuất mô hình ONNX và tự động copy đè sang tài nguyên Backend Spring Boot.
+- Đồng bộ hóa động dữ liệu 15 biển báo từ Spring Boot API `/api/recognize/classes` sang giao diện Frontend Web UI (`app.js` & `index.html`).
+- Tạo file [README.md](file:///d:/long-personal-project/Traffic-Sign-Recognition/README.md) đầy đủ thông tin giới thiệu dự án, bảng 15 biển báo và hướng dẫn từng bước chạy Demo (train AI & chạy Spring Boot).
 
-### Next Immediate Steps (Phase 4: Database & Persistence)
-1. Add Spring Data JPA and MySQL Connector dependencies to `pom.xml`.
-2. Configure MySQL datasource and JPA properties in `application.yml`.
-3. Design Entities: `User` and `RecognitionLog` (storing input type, detected sign, confidence score, timestamp, file reference).
-4. Implement Repositories and `RecognitionLogService` (Interface + Impl) for history persistence.
+### Next Immediate Steps
+1. Tiếp tục thu thập & bổ sung thêm ảnh thực tế đa dạng cho các lớp biển báo.
+2. Nâng cấp kĩ thuật Random Margin/Padding Augmentation trong `train_real.py` để tối ưu nhận diện ảnh chưa qua crop sát.
+3. Hoàn thiện Phase 4: Persistence nhật ký nhận diện vào MySQL/H2 Database.
