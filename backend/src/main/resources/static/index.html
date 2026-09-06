@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ thống Nhận diện Biển báo Giao thông - AI Traffic Sign Recognition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=2.0">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo-badge">AI</div>
+        <div>
+          <h1 class="brand-title">Hệ thống Nhận diện Biển báo Giao thông</h1>
+          <p class="brand-subtitle">15 Biển báo Giao thông Việt Nam &bull; Deep Learning CNN &bull; ONNX Runtime</p>
+        </div>
+      </div>
+      <div class="system-status">
+        <span class="status-indicator online"></span>
+        <span id="backend-status-text">Backend: Online (Port 8080)</span>
+      </div>
+    </div>
+
+    <nav class="nav-tabs">
+      <div class="nav-container">
+        <button class="tab-btn active" data-tab="tab-image">Nhận diện Ảnh</button>
+        <button class="tab-btn" data-tab="tab-video">Nhận diện Video</button>
+        <button class="tab-btn" data-tab="tab-webcam">Webcam Trực tiếp</button>
+        <button class="tab-btn" data-tab="tab-logs">Lịch sử & Thống kê</button>
+        <button class="tab-btn" data-tab="tab-classes" id="tab-classes-btn">Danh mục 15 Biển báo</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+
+    <!-- TAB 1: NHẬN DIỆN ẢNH -->
+    <section id="tab-image" class="tab-pane active">
+      <div class="grid-2col">
+        <div class="card upload-card">
+          <h2 class="card-title">Tải lên hình ảnh</h2>
+          <p class="card-desc">Chọn hoặc kéo thả ảnh biển báo giao thông (.jpg, .png) để nhận diện.</p>
+
+          <div class="drop-zone" id="image-drop-zone">
+            <svg class="upload-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p class="drop-prompt">Kéo thả ảnh vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="image-file-input" accept="image/jpeg,image/png,image/webp" hidden>
+            <p class="file-hint">Định dạng hỗ trợ: JPEG, PNG, WEBP (Tối đa 50MB)</p>
+          </div>
+
+          <div id="image-preview-container" class="preview-box hidden">
+            <img id="image-preview" src="" alt="Preview">
+            <button id="btn-cancel-image" class="btn btn-secondary btn-sm">Chọn ảnh khác</button>
+          </div>
+
+          <button id="btn-submit-image" class="btn btn-primary btn-block" disabled>
+            <span class="btn-text">Bắt đầu nhận diện</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </div>
+
+        <div class="card result-card">
+          <h2 class="card-title">Kết quả Nhận diện</h2>
+          <p class="card-desc">Thông tin chi tiết được suy luận bởi mạng CNN.</p>
+
+          <div id="image-empty-result" class="empty-state">
+            <p>Chưa có kết quả. Vui lòng tải ảnh lên và nhấn "Bắt đầu nhận diện".</p>
+          </div>
+
+          <div id="image-result-box" class="result-details hidden">
+            <div class="result-header">
+              <span id="img-category-badge" class="badge badge-warning">Cấm</span>
+              <span id="img-class-id" class="badge badge-id">Class ID: 14</span>
+            </div>
+
+            <h3 id="img-sign-vi" class="sign-name-vi">Dừng lại (Stop)</h3>
+            <p id="img-sign-en" class="sign-name-en">Stop</p>
+
+            <div class="metric-group">
+              <div class="metric-item">
+                <span class="metric-label">Độ tin cậy (Confidence)</span>
+                <span id="img-confidence-val" class="metric-val text-success">98.5%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="img-confidence-bar" class="progress-bar-fill" style="width: 98.5%;"></div>
+              </div>
+            </div>
+
+            <div class="meta-info-grid">
+              <div class="meta-item">
+                <span class="meta-label">Thời gian xử lý</span>
+                <span id="img-latency" class="meta-val">8 ms</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Mã lưu trữ (Log ID)</span>
+                <span id="img-log-id" class="meta-val">#102</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Tên tệp</span>
+                <span id="img-filename" class="meta-val">sign_photo.jpg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: NHẬN DIỆN VIDEO -->
+    <section id="tab-video" class="tab-pane">
+      <div class="grid-2col">
+        <div class="card upload-card">
+          <h2 class="card-title">Tải lên video hành trình</h2>
+          <p class="card-desc">Hệ thống sẽ lấy mẫu khung hình và dò tìm biển báo xuyên suốt video.</p>
+
+          <div class="drop-zone" id="video-drop-zone">
+            <svg class="upload-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            <p class="drop-prompt">Kéo thả video vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="video-file-input" accept="video/mp4,video/avi,video/quicktime" hidden>
+            <p class="file-hint">Định dạng hỗ trợ: MP4, AVI (Tối đa 50MB)</p>
+          </div>
+
+          <div id="video-preview-container" class="preview-box hidden">
+            <video id="video-preview" controls></video>
+            <button id="btn-cancel-video" class="btn btn-secondary btn-sm">Chọn video khác</button>
+          </div>
+
+          <div class="settings-panel">
+            <div class="setting-item">
+              <label for="sample-interval">Chu kỳ lấy mẫu (giây/frame):</label>
+              <input type="number" id="sample-interval" min="0.2" max="2.0" step="0.1" value="0.5">
+            </div>
+            <div class="setting-item">
+              <label for="min-threshold">Ngưỡng tin cậy tối thiểu (%):</label>
+              <input type="number" id="min-threshold" min="20" max="90" step="5" value="40">
+            </div>
+          </div>
+
+          <button id="btn-submit-video" class="btn btn-primary btn-block" disabled>
+            <span class="btn-text">Bắt đầu phân tích video</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </div>
+
+        <div class="card result-card">
+          <h2 class="card-title">Timeline Biển báo phát hiện</h2>
+          <p class="card-desc" id="video-summary-text">Chưa có dữ liệu phân tích video.</p>
+
+          <div id="video-empty-result" class="empty-state">
+            <p>Vui lòng chọn video và nhấn "Bắt đầu phân tích video".</p>
+          </div>
+
+          <div id="video-results-box" class="hidden">
+            <div class="video-stats-bar">
+              <span>Độ dài: <strong id="vid-duration">0s</strong></span>
+              <span>Tổng frame xử lý: <strong id="vid-frames">0</strong></span>
+              <span>Thời gian xử lý: <strong id="vid-time">0ms</strong></span>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thời điểm</th>
+                    <th>Class</th>
+                    <th>Biển báo (Tiếng Việt)</th>
+                    <th>Nhóm</th>
+                    <th>Độ tin cậy</th>
+                  </tr>
+                </thead>
+                <tbody id="video-detections-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: WEBCAM TRỰC TIẾP -->
+    <section id="tab-webcam" class="tab-pane">
+      <div class="webcam-layout">
+        <div class="card webcam-card">
+          <div class="webcam-header">
+            <div>
+              <h2 class="card-title">Camera / Webcam Trực tiếp</h2>
+              <p class="card-desc">Gửi luồng frame qua WebSocket (/ws/realtime) để nhận diện với độ trễ siêu thấp (1-2ms).</p>
+            </div>
+            <div class="webcam-controls">
+              <button id="btn-start-webcam" class="btn btn-success">Bật Webcam</button>
+              <button id="btn-stop-webcam" class="btn btn-danger hidden">Tắt Webcam</button>
+            </div>
+          </div>
+
+          <div class="webcam-view-wrapper">
+            <video id="webcam-video" autoplay playsinline muted></video>
+            <canvas id="webcam-canvas" hidden></canvas>
+
+            <div id="webcam-overlay" class="webcam-overlay hidden">
+              <div class="hud-top">
+                <span class="hud-chip live-chip"><span class="dot"></span> LIVE WS</span>
+                <span class="hud-chip" id="hud-fps">0 FPS</span>
+                <span class="hud-chip" id="hud-latency">0 ms</span>
+              </div>
+              <div class="hud-center">
+                <div class="webcam-target-box">
+                  <div class="corner-tl"></div>
+                  <div class="corner-tr"></div>
+                  <div class="corner-bl"></div>
+                  <div class="corner-br"></div>
+                  <span class="target-hint">Đưa biển báo vào khung này</span>
+                </div>
+              </div>
+              <div class="hud-bottom">
+                <div class="hud-sign-box">
+                  <span id="hud-sign-vi" class="hud-sign-title">Đang dò tìm biển báo...</span>
+                  <span id="hud-sign-en" class="hud-sign-subtitle">Detecting...</span>
+                  <div class="hud-conf-bar-bg">
+                    <div id="hud-conf-bar" class="hud-conf-bar-fill" style="width: 0%;"></div>
+                  </div>
+                  <span id="hud-conf-text" class="hud-conf-text">Độ tin cậy: 0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="webcam-placeholder" class="webcam-placeholder">
+              <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <p>Nhấn "Bật Webcam" để cấp quyền camera và bắt đầu nhận diện real-time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: LỊCH SỬ & THỐNG KÊ -->
+    <section id="tab-logs" class="tab-pane">
+      <div class="stats-overview-grid">
+        <div class="card stat-card">
+          <span class="stat-label">Tổng lượt nhận diện</span>
+          <h3 id="stat-total" class="stat-number">0</h3>
+          <span class="stat-hint">Lưu trữ trên CSDL</span>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-label">Độ tin cậy trung bình</span>
+          <h3 id="stat-avg-conf" class="stat-number text-success">0%</h3>
+          <span class="stat-hint">Mô hình CNN GTSRB</span>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-label">Biển báo phổ biến nhất</span>
+          <h3 id="stat-top-sign" class="stat-number text-primary">--</h3>
+          <span class="stat-hint" id="stat-top-count">0 lượt phát hiện</span>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <div class="card-toolbar">
+          <h2 class="card-title">Nhật ký Nhận diện</h2>
+          <div class="filter-controls">
+            <select id="log-filter-type" class="form-select">
+              <option value="">Tất cả loại dữ liệu</option>
+              <option value="IMAGE">Chỉ ảnh (IMAGE)</option>
+              <option value="VIDEO">Chỉ video (VIDEO)</option>
+              <option value="REALTIME">Webcam (REALTIME)</option>
+            </select>
+            <button id="btn-refresh-logs" class="btn btn-secondary btn-sm">Làm mới</button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Loại</th>
+                <th>Biển báo (Tiếng Việt)</th>
+                <th>Tiếng Anh</th>
+                <th>Nhóm</th>
+                <th>Độ tin cậy</th>
+                <th>Thời gian suy luận</th>
+                <th>Thời điểm tạo</th>
+              </tr>
+            </thead>
+            <tbody id="logs-tbody">
+              <tr>
+                <td colspan="8" class="text-center">Đang tải nhật ký nhận diện...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination-bar">
+          <button id="btn-prev-page" class="btn btn-secondary btn-sm" disabled>&laquo; Trang trước</button>
+          <span id="page-indicator">Trang 1</span>
+          <button id="btn-next-page" class="btn btn-secondary btn-sm">Trang sau &raquo;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: DANH MỤC 15 BIỂN BÁO -->
+    <section id="tab-classes" class="tab-pane">
+      <div class="card">
+        <div class="card-toolbar">
+          <div>
+            <h2 class="card-title" id="classes-card-title">Danh mục 15 Biển báo Giao thông Việt Nam</h2>
+            <p class="card-desc">15 lớp biển báo giao thông Việt Nam phổ biến đã được huấn luyện nhận diện bởi mạng CNN.</p>
+          </div>
+          <input type="text" id="class-search-input" class="form-input" placeholder="Tìm kiếm tên biển báo...">
+        </div>
+
+        <div id="classes-grid" class="classes-grid">
+          <!-- Will be loaded dynamically from /api/recognize/classes -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 Traffic Sign Recognition System &bull; Trường Đại học &bull; Đồ án Mạng Nơ-ron Tích chập & Spring Boot</p>
+  </footer>
+
+  <script src="/js/app.js?v=2.0"></script>
+</body>
+</html>

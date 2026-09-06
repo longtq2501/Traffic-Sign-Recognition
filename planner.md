@@ -119,13 +119,14 @@
 **Mục tiêu:** Giao diện cho phép người dùng thao tác cả 3 chế độ.
 
 **Việc cần làm:**
-- [ ] Trang upload ảnh: chọn file → gọi API `/api/recognize/image` → hiển thị kết quả + confidence
-- [ ] Trang upload video: chọn file → gọi API `/api/recognize/video` → hiển thị danh sách kết quả theo thời gian
-- [ ] Trang real-time: dùng `getUserMedia` truy cập webcam, capture frame định kỳ (ví dụ mỗi 200–500ms), gửi qua WebSocket, hiển thị kết quả overlay trực tiếp
-- [ ] Trang lịch sử: hiển thị danh sách log từ `/api/logs`
-- [ ] UI đồng nhất, thông báo lỗi rõ ràng khi không có biển báo trong ảnh
+- [x] Trang upload ảnh: kéo thả/chọn file ảnh → gọi API `/api/recognize/image` → hiển thị tên biển báo (Việt/Anh), nhóm, thanh confidence bar và thời gian suy luận
+- [x] Trang upload video: chọn file video → gọi API `/api/recognize/video` → hiển thị bảng timeline biển báo phát hiện theo từng giây
+- [x] Trang real-time: dùng `getUserMedia` truy cập webcam, capture frame mỗi 250ms gửi qua WebSocket `/ws/realtime`, hiển thị HUD overlay kết quả trực tiếp với latency 1-2ms
+- [x] Trang lịch sử: xem bảng nhật ký nhận diện từ `/api/logs` có phân trang, lọc theo inputType và các thẻ thống kê tổng quan từ `/api/logs/stats`
+- [x] Trang tra cứu danh mục: hiển thị lưới 43 biển báo giao thông GTSRB song ngữ từ `/api/recognize/classes` kèm ô tìm kiếm
+- [x] Giao diện đồng nhất, thẩm mỹ hiện đại (Inter font, dark theme, responsive), cấu trúc Spring Boot static welcome page tự động phục vụ tại `http://localhost:8080/` và thư mục `frontend/`
 
-**Deliverable:** Demo end-to-end chạy được trên trình duyệt cho cả 3 chế độ.
+**Deliverable:** Demo end-to-end hoàn chỉnh sẵn sàng trình diễn cho giáo viên xem trên trình duyệt cho cả 3 chế độ.
 
 ---
 

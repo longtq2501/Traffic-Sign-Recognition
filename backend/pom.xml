@@ -48,11 +48,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- H2 In-Memory Database for Unit/Integration Tests -->
+		<!-- H2 Database for Unit Tests & Standalone Local Demo -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- ONNX Runtime for Java -->

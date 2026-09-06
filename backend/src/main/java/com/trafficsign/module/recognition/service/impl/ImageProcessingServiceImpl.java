@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -30,11 +31,8 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
             throw new ModelInferenceException("Image input stream must not be null");
         }
         try {
-            BufferedImage image = ImageIO.read(inputStream);
-            if (image == null) {
-                throw new ModelInferenceException("Unable to decode image: unsupported or corrupted image format");
-            }
-            return preprocessImage(image);
+            byte[] imageBytes = inputStream.readAllBytes();
+            return preprocessImage(imageBytes);
         } catch (IOException e) {
             log.error("Error reading image input stream", e);
             throw new ModelInferenceException("Failed to read image stream: " + e.getMessage(), e);
@@ -47,7 +45,11 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
             throw new ModelInferenceException("Image bytes must not be empty");
         }
         try (ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes)) {
-            return preprocessImage(bais);
+            BufferedImage image = ImageIO.read(bais);
+            if (image == null) {
+                throw new ModelInferenceException("Unable to decode image: unsupported or corrupted image format. Supported: JPEG, PNG, GIF, BMP");
+            }
+            return preprocessImage(image);
         } catch (IOException e) {
             throw new ModelInferenceException("Failed to read image byte array: " + e.getMessage(), e);
         }
@@ -59,10 +61,28 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
             throw new ModelInferenceException("BufferedImage cannot be null");
         }
 
-        // Step 1: Resize to 32x32 using high-quality Bilinear interpolation
-        BufferedImage resized = resizeImage(image, TARGET_WIDTH, TARGET_HEIGHT);
+        // Step 1: Composite onto white RGB background to handle alpha/transparency (PNG, WebP)
+        // Without this, transparent pixels become black (0,0,0) which skews normalization
+        BufferedImage rgbImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = rgbImage.createGraphics();
+        try {
+            g2d.setColor(java.awt.Color.WHITE);
+            g2d.fillRect(0, 0, image.getWidth(), image.getHeight());
+            g2d.drawImage(image, 0, 0, null);
+        } finally {
+            g2d.dispose();
+        }
 
-        // Step 2: Build NCHW tensor [1, 3, 32, 32]
+        // Step 2: Square-crop from center before resizing.
+        // torchvision.transforms.Resize((32,32)) on non-square images does NOT stretch —
+        // it resizes the shorter side to 32 then center-crops to 32x32.
+        // We replicate this: crop a center square first, then resize.
+        BufferedImage squared = centerCropToSquare(rgbImage);
+
+        // Step 3: Resize to 32x32 using high-quality Bilinear interpolation
+        BufferedImage resized = resizeImage(squared, TARGET_WIDTH, TARGET_HEIGHT);
+
+        // Step 4: Build NCHW tensor [1, 3, 32, 32]
         float[][][][] tensor = new float[1][3][TARGET_HEIGHT][TARGET_WIDTH];
 
         for (int y = 0; y < TARGET_HEIGHT; y++) {
@@ -82,6 +102,22 @@ public class ImageProcessingServiceImpl implements ImageProcessingService {
         }
 
         return tensor;
+    }
+
+    /**
+     * Crops the largest center square from the image, preserving aspect ratio.
+     * Equivalent to torchvision CenterCrop behavior when combined with Resize.
+     */
+    private BufferedImage centerCropToSquare(BufferedImage image) {
+        int w = image.getWidth();
+        int h = image.getHeight();
+        if (w == h) {
+            return image;
+        }
+        int side = Math.min(w, h);
+        int x = (w - side) / 2;
+        int y = (h - side) / 2;
+        return image.getSubimage(x, y, side, side);
     }
 
     @Override

@@ -5,24 +5,13 @@ spring:
   application:
     name: traffic-sign-backend
 
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:h2}
+
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/traffic_sign_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: ""
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
 
 app:
   model:
