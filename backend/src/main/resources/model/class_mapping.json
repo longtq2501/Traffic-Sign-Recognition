@@ -17,35 +17,35 @@
     {
       "id": 2,
       "code": "W.207a",
-      "name_vi": "Đường hai chiều",
-      "name_en": "Two-way traffic",
+      "name_vi": "Giao nhau với đường không ưu tiên",
+      "name_en": "Intersection with non-priority road",
       "category": "Warning"
     },
     {
       "id": 3,
       "code": "W.208",
-      "name_vi": "Giao nhau với đường sắt có rào chắn",
-      "name_en": "Level crossing with barrier",
+      "name_vi": "Giao nhau với đường ưu tiên",
+      "name_en": "Intersection with priority road",
       "category": "Warning"
     },
     {
       "id": 4,
       "code": "W.224",
-      "name_vi": "Đường trơn trượt",
-      "name_en": "Slippery road",
+      "name_vi": "Đường người đi bộ cắt ngang",
+      "name_en": "Pedestrian crossing",
       "category": "Warning"
     },
     {
       "id": 5,
-      "code": "W.245",
-      "name_vi": "Trẻ em",
-      "name_en": "Children crossing",
+      "code": "W.245a",
+      "name_vi": "Đi chậm",
+      "name_en": "Slow down",
       "category": "Warning"
     },
     {
       "id": 6,
       "code": "P.102",
-      "name_vi": "Đường cấm",
+      "name_vi": "Cấm đi ngược chiều",
       "name_en": "No entry for all vehicles",
       "category": "Prohibitory"
     },
@@ -59,15 +59,15 @@
     {
       "id": 8,
       "code": "P.104",
-      "name_vi": "Cấm xe mô tô",
+      "name_vi": "Cấm xe mô tô, xe máy",
       "name_en": "No motorcycles",
       "category": "Prohibitory"
     },
     {
       "id": 9,
-      "code": "P.123",
-      "name_vi": "Cấm vượt",
-      "name_en": "No overtaking",
+      "code": "P.123a",
+      "name_vi": "Cấm rẽ trái",
+      "name_en": "No left turn",
       "category": "Prohibitory"
     },
     {
@@ -87,22 +87,22 @@
     {
       "id": 12,
       "code": "R.301a",
-      "name_vi": "Hướng đi phải theo: Đi thẳng",
+      "name_vi": "Hướng đi phải theo: Chỉ được đi thẳng",
       "name_en": "Ahead only",
       "category": "Mandatory"
     },
     {
       "id": 13,
       "code": "R.302a",
-      "name_vi": "Hướng đi phải theo: Rẽ phải",
-      "name_en": "Turn right ahead",
+      "name_vi": "Hướng đi phải theo: Đi vòng sang phải",
+      "name_en": "Pass on right side",
       "category": "Mandatory"
     },
     {
       "id": 14,
       "code": "R.303",
-      "name_vi": "Giao thông hai chiều",
-      "name_en": "Two-way traffic (mandatory)",
+      "name_vi": "Nơi giao nhau chạy theo vòng xuyến",
+      "name_en": "Roundabout mandatory",
       "category": "Mandatory"
     }
   ],

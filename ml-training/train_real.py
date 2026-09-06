@@ -30,6 +30,9 @@ MODEL_PTH       = os.path.join(BASE_DIR, 'best_model_vn.pth')
 MODEL_ONNX      = os.path.join(BASE_DIR, 'traffic_sign_model.onnx')
 BACKEND_RES_ONNX = os.path.join(BASE_DIR, '..', 'backend', 'src', 'main', 'resources', 'model', 'traffic_sign_model.onnx')
 BACKEND_TGT_ONNX = os.path.join(BASE_DIR, '..', 'backend', 'target', 'classes', 'model', 'traffic_sign_model.onnx')
+CLASS_MAPPING_SRC = os.path.join(BASE_DIR, 'class_mapping_vn.json')
+BACKEND_RES_MAP  = os.path.join(BASE_DIR, '..', 'backend', 'src', 'main', 'resources', 'model', 'class_mapping.json')
+BACKEND_TGT_MAP  = os.path.join(BASE_DIR, '..', 'backend', 'target', 'classes', 'model', 'class_mapping.json')
 
 NUM_CLASSES = 15
 EPOCHS      = 25
@@ -77,6 +80,7 @@ class TrafficSignCNN(nn.Module):
 def augment_image(img):
     # Random slight rotation
     angle = random.uniform(-15, 15)
+    # pyrefly: ignore [missing-attribute]
     img = img.rotate(angle, resample=Image.BILINEAR, fillcolor=(255, 255, 255))
 
     # Random crop / zoom
@@ -85,6 +89,7 @@ def augment_image(img):
     nw, nh = int(w * scale), int(h * scale)
     left = random.randint(0, w - nw)
     top = random.randint(0, h - nh)
+    # pyrefly: ignore [missing-attribute]
     img = img.crop((left, top, left + nw, top + nh)).resize((w, h), Image.BILINEAR)
 
     # Lighting variations
@@ -104,6 +109,7 @@ class RealSignDataset(Dataset):
     def __len__(self):
         return len(self.samples)
 
+    # pyrefly: ignore [bad-override-param-name]
     def __getitem__(self, idx):
         img, label = self.samples[idx]
         if self.transform:
@@ -263,6 +269,7 @@ def train_and_export():
     dummy = torch.randn(1, 3, 32, 32)
     torch.onnx.export(
         model,
+        # pyrefly: ignore [bad-argument-type]
         dummy,
         MODEL_ONNX,
         export_params=True,
@@ -281,7 +288,12 @@ def train_and_export():
     for dest in [BACKEND_RES_ONNX, BACKEND_TGT_ONNX]:
         if os.path.exists(os.path.dirname(dest)):
             shutil.copy2(MODEL_ONNX, dest)
-            print(f"Deployed to backend: {dest}")
+            print(f"Deployed model to backend: {dest}")
+
+    for dest in [BACKEND_RES_MAP, BACKEND_TGT_MAP]:
+        if os.path.exists(os.path.dirname(dest)) and os.path.exists(CLASS_MAPPING_SRC):
+            shutil.copy2(CLASS_MAPPING_SRC, dest)
+            print(f"Deployed mapping to backend: {dest}")
 
     print("\nAll done! You can now restart your backend server to load the new weights.")
 
