@@ -34,7 +34,7 @@ CLASS_MAPPING_SRC = os.path.join(BASE_DIR, 'class_mapping_vn.json')
 BACKEND_RES_MAP  = os.path.join(BASE_DIR, '..', 'backend', 'src', 'main', 'resources', 'model', 'class_mapping.json')
 BACKEND_TGT_MAP  = os.path.join(BASE_DIR, '..', 'backend', 'target', 'classes', 'model', 'class_mapping.json')
 
-NUM_CLASSES = 15
+NUM_CLASSES = 18
 EPOCHS      = 25
 BATCH_SIZE  = 32
 LR          = 1e-3

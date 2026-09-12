@@ -29,9 +29,9 @@ Hệ thống ứng dụng Trí tuệ nhân tạo (AI/Deep Learning) kết hợp 
 ```text
 Traffic-Sign-Recognition/
 ├── ml-training/                # Phân hệ Huấn luyện AI & Xuất Model ONNX
-│   ├── dataset_real/           # Thư mục chứa các bộ ảnh thực tế (00_ đến 14_)
+│   ├── dataset_real/           # Thư mục chứa các bộ ảnh thực tế (00_ đến 17_)
 │   ├── train_real.py           # Script train mô hình với ảnh thực tế
-│   ├── class_mapping_vn.json   # Danh mục định nghĩa 15 biển báo tiếng Việt
+│   ├── class_mapping_vn.json   # Danh mục định nghĩa 18 biển báo tiếng Việt
 │   └── requirements.txt        # Danh sách thư viện Python cần thiết
 ├── backend/                    # Phân hệ Backend Spring Boot (REST API)
 │   ├── src/main/java/          # Source code Java (Controller, Service, Inference)
@@ -47,7 +47,7 @@ Traffic-Sign-Recognition/
 
 ---
 
-## 📋 Danh sách 15 Biển báo Giao thông Hỗ trợ
+## 📋 Danh sách 18 Biển báo Giao thông Hỗ trợ
 
 | Class ID | Mã biển báo | Tên biển báo tiếng Việt | Loại biển |
 | :---: | :---: | :--- | :---: |
@@ -66,6 +66,9 @@ Traffic-Sign-Recognition/
 | `12` | **R.301a** | Hướng đi phải theo: Chỉ được đi thẳng | Biển hiệu lệnh |
 | `13` | **R.302a** | Hướng đi phải theo: Đi vòng sang phía phải | Biển hiệu lệnh |
 | `14` | **R.303** | Nơi giao nhau chạy theo vòng xuyến | Biển hiệu lệnh |
+| `15` | **R.420** | Bắt đầu khu đông dân cư | Biển chỉ dẫn |
+| `16` | **R.421** | Hết khu đông dân cư | Biển chỉ dẫn |
+| `17` | **R.122** | Dừng lại (STOP) | Biển cấm |
 
 ---
 
@@ -90,7 +93,7 @@ Traffic-Sign-Recognition/
    python -m pip install -r requirements.txt
    ```
 
-3. *(Tùy chọn)* Thêm các hình ảnh thực tế bạn tự chụp hoặc tải về vào các thư mục tương ứng trong `dataset_real/` (`00_...` đến `14_...`).
+3. *(Tùy chọn)* Thêm các hình ảnh thực tế bạn tự chụp hoặc tải về vào các thư mục tương ứng trong `dataset_real/` (`00_...` đến `17_...`).
 
 4. Chạy lệnh huấn luyện mô hình và tự động xuất mô hình ONNX:
    ```powershell
@@ -135,7 +138,7 @@ Traffic-Sign-Recognition/
 2. **Trải nghiệm các tính năng:**
    - 🖼️ **Nhận diện Ảnh:** Kéo thả hoặc tải lên ảnh biển báo giao thông để xem kết quả phân loại & độ tin cậy.
    - 🎥 **Nhận diện Video:** Tải lên video hành trình để AI nhận diện qua từng khung hình.
-   - 📚 **Danh mục 15 Biển báo:** Xem toàn bộ danh sách biển báo được đồng bộ động từ Backend.
+   - 📚 **Danh mục 18 Biển báo:** Xem toàn bộ danh sách biển báo được đồng bộ động từ Backend.
    - 📊 **Lịch sử & Thống kê:** Xem danh sách nhật ký nhận diện đã lưu.
 
 ---

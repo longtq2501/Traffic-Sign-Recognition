@@ -104,6 +104,27 @@
       "name_vi": "Nơi giao nhau chạy theo vòng xuyến",
       "name_en": "Roundabout mandatory",
       "category": "Mandatory"
+    },
+    {
+      "id": 15,
+      "code": "R.420",
+      "name_vi": "Bắt đầu khu đông dân cư",
+      "name_en": "Start of built-up area",
+      "category": "Indication"
+    },
+    {
+      "id": 16,
+      "code": "R.421",
+      "name_vi": "Hết khu đông dân cư",
+      "name_en": "End of built-up area",
+      "category": "Indication"
+    },
+    {
+      "id": 17,
+      "code": "R.122",
+      "name_vi": "Dừng lại (STOP)",
+      "name_en": "Stop",
+      "category": "Prohibitory"
     }
   ],
   "model_metadata": {
@@ -130,6 +151,6 @@
         0.225
       ]
     },
-    "num_classes": 15
+    "num_classes": 18
   }
 }
